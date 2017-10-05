@@ -19,6 +19,7 @@ import java.io.File
 import akka.actor.ActorSystem
 import akka.http.scaladsl._
 import akka.http.scaladsl.coding.{Gzip, NoCoding}
+import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server._
 import akka.stream.{ActorMaterializer, Materializer}
@@ -30,9 +31,7 @@ object fileserver {
   def handle(fsDir: String)(implicit sys: ActorSystem, mat: Materializer, dis: ExecutionContext): Route = {
     decodeRequestWith(Gzip,NoCoding){
       encodeResponseWith(NoCoding,Gzip){
-        get{
-		      getFromDirectory(fsDir)
-        }
+        getFromBrowseableDirectory(fsDir)
       }
     }
   }
